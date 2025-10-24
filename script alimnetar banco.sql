@@ -1,7 +1,8 @@
-
 -- ============================================
 -- Remover tabelas existentes (se houver)
 -- ============================================
+DROP TABLE IF EXISTS estoque CASCADE;
+DROP TABLE IF EXISTS product CASCADE;
 DROP TABLE IF EXISTS supplier CASCADE;
 DROP TABLE IF EXISTS type_product CASCADE;
 DROP TABLE IF EXISTS company CASCADE;
@@ -36,6 +37,30 @@ CREATE TABLE supplier (
     company_id INTEGER NOT NULL,
     CONSTRAINT fk_supplier_company FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE
 );
+
+-- Tabela Product (NOVA)
+CREATE TABLE product (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    tipo_id INTEGER NOT NULL,
+    fornecedor_id INTEGER NOT NULL,
+    empresa_id INTEGER NOT NULL,
+    CONSTRAINT fk_product_type FOREIGN KEY (tipo_id) REFERENCES type_product(id),
+    CONSTRAINT fk_product_supplier FOREIGN KEY (fornecedor_id) REFERENCES supplier(id),
+    CONSTRAINT fk_product_company FOREIGN KEY (empresa_id) REFERENCES company(id) ON DELETE CASCADE
+);
+
+-- Tabela Estoque (NOVA)
+CREATE TABLE estoque (
+    id SERIAL PRIMARY KEY,
+    produto_id INTEGER UNIQUE NOT NULL, -- Geralmente um produto tem um só registro de estoque
+    quantidade INTEGER NOT NULL CHECK (quantidade >= 0),
+    data_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_estoque_product FOREIGN KEY (produto_id) REFERENCES product(id) ON DELETE CASCADE
+);
+
 
 -- ============================================
 -- Inserção de Dados - Companies (30 registros)
@@ -75,6 +100,7 @@ INSERT INTO company (name, cnpj, status) VALUES
 
 -- ============================================
 -- Inserção de Dados - Type Product (50 registros)
+-- (É ESSENCIAL EXECUTAR ISSO ANTES DE INSERIR PRODUTOS)
 -- ============================================
 
 INSERT INTO type_product (name, cod, company_id) VALUES
@@ -87,7 +113,7 @@ INSERT INTO type_product (name, cod, company_id) VALUES
 ('Smartphone', 'SP-001', 5),
 ('Tablet', 'TB-002', 5),
 ('Fone de Ouvido', 'FN-003', 5),
-('Camiseta', 'CM-001', 6),
+('Camiseta', 'CM-002', 6),
 ('Calça Jeans', 'CJ-002', 6),
 ('Cimento', 'CM-001', 7),
 ('Tijolo', 'TJ-002', 7),
@@ -131,6 +157,7 @@ INSERT INTO type_product (name, cod, company_id) VALUES
 
 -- ============================================
 -- Inserção de Dados - Suppliers (45 registros)
+-- (É ESSENCIAL EXECUTAR ISSO ANTES DE INSERIR PRODUTOS)
 -- ============================================
 
 INSERT INTO supplier (name, cnpj, status, company_id) VALUES
@@ -181,12 +208,36 @@ INSERT INTO supplier (name, cnpj, status, company_id) VALUES
 ('Lentes & Armações', '87.555.666/0001-77', 'ATIVO', 29);
 
 -- ============================================
+-- Inserção de Dados - Product (Exemplos)
+-- (ISTO SÓ VAI FUNCIONAR DEPOIS DOS INSERTS ACIMA)
+-- ============================================
+-- Adicionando alguns produtos para teste
+INSERT INTO product (nome, descricao, preco, tipo_id, fornecedor_id, empresa_id) VALUES
+('Notebook Gamer', 'Notebook com placa de vídeo dedicada', 5999.90, 1, 1, 1),
+('Arroz Agulhinha', 'Arroz tipo 1, 5kg', 25.00, 4, 4, 4),
+('Smartphone X', 'Smartphone 128GB', 1500.00, 7, 6, 5),
+('Parafuso Sextavado', 'Caixa com 100', 35.50, 24, 19, 12);
+
+-- ============================================
+-- Inserção de Dados - Estoque (Exemplos)
+-- =A- (ISTO SÓ VAI FUNCIONAR DEPOIS DOS INSERTS DE PRODUTOS)
+-- ============================================
+-- Adicionando estoque para os produtos criados
+INSERT INTO estoque (produto_id, quantidade) VALUES
+(1, 50),  -- 50 unidades do Notebook Gamer
+(2, 200), -- 200 unidades do Arroz Agulhinha
+(3, 150), -- 150 unidades do Smartphone X
+(4, 1000); -- 1000 caixas do Parafuso Sextavado
+
+
+-- ============================================
 -- Verificação dos Dados Inseridos
 -- ============================================
-
 SELECT 'Total de Companies:' AS info, COUNT(*) AS total FROM company;
 SELECT 'Total de Type Products:' AS info, COUNT(*) AS total FROM type_product;
 SELECT 'Total de Suppliers:' AS info, COUNT(*) AS total FROM supplier;
+SELECT 'Total de Products:' AS info, COUNT(*) AS total FROM product;
+SELECT 'Total de Estoque:' AS info, COUNT(*) AS total FROM estoque;
 
 -- ============================================
 -- Consultas de Exemplo

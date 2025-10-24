@@ -3,7 +3,6 @@ from modules.product.schemas import ProductCreate
 
 class ProductRepository:
     
-    # Query base com todos os JOINs necessários para o schema ProductOut
     QUERY_BASE = """
         SELECT 
             p.id,
@@ -55,11 +54,9 @@ class ProductRepository:
                 product.empresa_id
             )
             
-            # 1. Cria o produto e obtém o ID retornado
             created_product = db.commit(self.QUERY_CREATE, params)
             if not created_product:
                 return None
             
-            # 2. Busca o produto recém-criado com todos os dados (JOINs) para retornar
             return self.get_id(created_product['id'])
 

@@ -16,4 +16,4 @@ class Company(CompanyBase):
     id: int
 
     class Config:
-        from_attributes = True # Antigo orm_mode
+        from_attributes = True 

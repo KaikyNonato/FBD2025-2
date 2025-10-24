@@ -19,7 +19,6 @@ class Product(ProductBase):
     class Config:
         from_attributes = True
 
-# Schema de saída com nomes (DICA) 
 class ProductOut(Product):
     tipo_nome: str
     fornecedor_nome: str
