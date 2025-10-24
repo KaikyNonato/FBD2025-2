@@ -5,10 +5,7 @@ from modules.stock.schemas import StockCreate
 class StockRepository:
     
     QUERY_BASE = """
-        SELECT 
-            e.*, 
-            p.nome as produto_nome
-        FROM estoque e
+        SELECT e.*, p.nome as produto_nomeFROM estoque e
         JOIN product p ON e.produto_id = p.id
     """
     
@@ -23,11 +20,9 @@ class StockRepository:
     """
     
     QUERY_GET_CREATED = f"""
-        SELECT 
-            e.*,
+        SELECT e.*,
             (SELECT nome FROM product WHERE id = e.produto_id) as produto_nome
-        FROM estoque e
-        WHERE e.id = %s
+        FROM estoque e WHERE e.id = %s
     """
 
     def get_all(self):

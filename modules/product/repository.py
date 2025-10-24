@@ -4,18 +4,7 @@ from modules.product.schemas import ProductCreate
 class ProductRepository:
     
     QUERY_BASE = """
-        SELECT 
-            p.id,
-            p.nome,
-            p.descricao,
-            p.preco,
-            p.tipo_id,
-            p.fornecedor_id,
-            p.empresa_id,
-            tp.name as tipo_nome,
-            s.name as fornecedor_nome,
-            c.name as empresa_nome
-        FROM product p
+        SELECT p.id, p.nome, p.descricao, p.preco, p.tipo_id, p.fornecedor_id, p.empresa_id, tp.name as tipo_nome, s.name as fornecedor_nome, c.name as empresa_nome FROM product p
         JOIN type_product tp ON p.tipo_id = tp.id
         JOIN supplier s ON p.fornecedor_id = s.id
         JOIN company c ON p.empresa_id = c.id
