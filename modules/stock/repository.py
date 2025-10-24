@@ -5,7 +5,7 @@ from modules.stock.schemas import StockCreate
 class StockRepository:
     
     QUERY_BASE = """
-        SELECT e.*, p.nome as produto_nomeFROM estoque e
+        SELECT  e.*,  p.nome as produto_nome FROM estoque e
         JOIN product p ON e.produto_id = p.id
     """
     
