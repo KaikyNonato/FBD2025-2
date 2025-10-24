@@ -12,7 +12,7 @@ class StockRepository:
         JOIN product p ON e.produto_id = p.id
     """
     
-    QUERY_ALL = f"{QUERY_BASE} ORDER BY p.nome"
+    QUERY_ALL = f"{QUERY_BASE} ORDER BY e.id"
     QUERY_GET_ID = f"{QUERY_BASE} WHERE e.id = %s"
     
   

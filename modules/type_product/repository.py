@@ -3,7 +3,7 @@ from modules.type_product.schemas import TypeProductCreate
 
 
 class TypeProductRepository:
-    QUERY_ALL = "SELECT * FROM type_product ORDER BY name;"
+    QUERY_ALL = "SELECT * FROM type_product ORDER BY id;"
     QUERY_GET_ID = "SELECT * FROM type_product WHERE id = %s;"
     QUERY_CREATE = "INSERT INTO type_product (name, cod, company_id) VALUES (%s, %s, %s) RETURNING *;"
 

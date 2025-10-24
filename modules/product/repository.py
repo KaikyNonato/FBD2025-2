@@ -21,9 +21,9 @@ class ProductRepository:
         JOIN company c ON p.empresa_id = c.id
     """
     
-    QUERY_ALL = f"{QUERY_BASE} ORDER BY p.nome"
+    QUERY_ALL = f"{QUERY_BASE} ORDER BY p.id"
     QUERY_GET_ID = f"{QUERY_BASE} WHERE p.id = %s"
-    QUERY_GET_BY_COMPANY = f"{QUERY_BASE} WHERE p.empresa_id = %s ORDER BY p.nome"
+    QUERY_GET_BY_COMPANY = f"{QUERY_BASE} WHERE p.empresa_id = %s ORDER BY p.id"
     
     QUERY_CREATE = """
         INSERT INTO product (nome, descricao, preco, tipo_id, fornecedor_id, empresa_id) 
@@ -59,4 +59,3 @@ class ProductRepository:
                 return None
             
             return self.get_id(created_product['id'])
-

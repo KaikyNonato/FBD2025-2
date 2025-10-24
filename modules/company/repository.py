@@ -3,7 +3,7 @@ from modules.company.schemas import CompanyCreate
 
 
 class CompanyRepository:
-    QUERY_ALL = "SELECT * FROM company ORDER BY name;"
+    QUERY_ALL = "SELECT * FROM company ORDER BY id;"
     QUERY_GET_ID = "SELECT * FROM company WHERE id = %s;"
     QUERY_CREATE = "INSERT INTO company (name, cnpj, status) VALUES (%s, %s, %s) RETURNING *;"
 

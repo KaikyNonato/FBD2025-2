@@ -3,7 +3,7 @@ from modules.supplier.schemas import SupplierCreate
 
 
 class SupplierRepository:
-    QUERY_ALL = "SELECT * FROM supplier ORDER BY name;"
+    QUERY_ALL = "SELECT * FROM supplier ORDER BY id;"
     QUERY_GET_ID = "SELECT * FROM supplier WHERE id = %s;"
     QUERY_CREATE = "INSERT INTO supplier (name, cnpj, status, company_id) VALUES (%s, %s, %s, %s) RETURNING *;"
 
