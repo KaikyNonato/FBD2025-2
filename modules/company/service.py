@@ -1,18 +1,16 @@
-from modules.company import schemas
 from modules.company.repository import CompanyRepository
+from modules.company.schemas import CompanyCreate
 
 
 class CompanyService:
-    def get_companies(self):
-        repository = CompanyRepository()
-        return repository.get_all()
+    def __init__(self):
+        self.repository = CompanyRepository()
 
-    def create_company(self, company: schemas.CompanyCreate):
-        # VALIDAR OS CAMPOS DO CREATE AQUI
-        repository = CompanyRepository()
-        return repository.save(company)
+    def get_companies(self):
+        return self.repository.get_all()
 
     def get_company_id(self, id: int):
-        repository = CompanyRepository()
-        company = repository.get_id(id)
-        return company
+        return self.repository.get_id(id)
+
+    def create_company(self, company: CompanyCreate):
+        return self.repository.save(company)

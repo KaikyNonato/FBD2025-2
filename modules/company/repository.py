@@ -3,28 +3,19 @@ from modules.company.schemas import CompanyCreate
 
 
 class CompanyRepository:
-    QUERY_COMPANIES = "SELECT id, name FROM company"
-    QUERY_COMPANY_ID = "SELECT id, name FROM company where id = %s"
-    QUERY_CREATE_COMPANY = 'INSERT INTO company (name) VALUES (%s) RETURNING id;'
+    QUERY_ALL = "SELECT * FROM company ORDER BY name;"
+    QUERY_GET_ID = "SELECT * FROM company WHERE id = %s;"
+    QUERY_CREATE = "INSERT INTO company (name, cnpj, status) VALUES (%s, %s, %s) RETURNING *;"
 
     def get_all(self):
-        db = DataBase()
-        companies = db.execute(self.QUERY_COMPANIES)
-        results = []
-        for company in companies:
-            results.append({"id": company[0], "name": company[1]})
-        return results
-
-    def save(self, company: CompanyCreate):
-        db = DataBase()
-        query = self.QUERY_CREATE_COMPANY % f"'{company.name}'"
-        result = db.commit(query)
-        return {"id": result[0], "name": company.name}
+        with DataBase() as db:
+            return db.execute(self.QUERY_ALL)
 
     def get_id(self, id: int):
-        db = DataBase()
-        query = self.QUERY_COMPANY_ID % id
-        company = db.execute(query, many=False)
-        if company:
-            return {"id": company[0], "name": company[1]}
-        return {}
+        with DataBase() as db:
+            return db.execute(self.QUERY_GET_ID, (id,), many=False)
+
+    def save(self, company: CompanyCreate):
+        with DataBase() as db:
+            params = (company.name, company.cnpj, company.status)
+            return db.commit(self.QUERY_CREATE, params)
