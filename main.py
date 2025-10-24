@@ -24,4 +24,4 @@ app.include_router(stock_routes.router)
 @app.get("/")
 async def read_root():
     return {"PROJETO": "PRIMEIRA VA",
-            "BANCO DE DADOS": "TEM TODO O SCRIP NO ARQUIVO 'script alimentar banco.sql' PARA O BANCO DE DADOS FUNCIONAR. BASTA APENAS COPIAR E COLOCAR ESSE SCRIP NA BASEDATA DO PGADMIN."}
+            "BANCO DE DADOS": "TEM TODO O SCRIPT NO ARQUIVO 'script alimentar banco.sql' PARA O BANCO DE DADOS FUNCIONAR. BASTA APENAS COPIAR E COLOCAR ESSE SCRIPT NA BASEDATA DO PGADMIN."}
