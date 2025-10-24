@@ -10,12 +10,21 @@ def get_service():
 
 @router.get("/", response_model=List[schemas.Supplier])
 def list_suppliers(service: SupplierService = Depends(get_service)):
+    """
+    Retorna uma lista de fornecedores.
+    """
     return service.get_all()
 
 @router.get("/{id}/", response_model=Optional[schemas.Supplier])
 def get_supplier_by_id(id: int, service: SupplierService = Depends(get_service)):
+    """
+    Retorna um fornecedor pelo ID.
+    """
     return service.get_by_id(id)
 
 @router.post("/", response_model=schemas.Supplier, status_code=201)
 def add_supplier(supplier_in: schemas.SupplierCreate, service: SupplierService = Depends(get_service)):
+    """
+    Adiciona um novo fornecedor.
+    """
     return service.create(supplier_in)

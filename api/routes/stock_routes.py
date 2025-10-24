@@ -10,12 +10,21 @@ def get_service():
 
 @router.get("/", response_model=List[schemas.StockOut])
 def list_stock(service: StockService = Depends(get_service)):
+    """
+    Retorna uma lista de estoques.
+    """
     return service.get_all()
 
 @router.get("/{id}/", response_model=Optional[schemas.StockOut])
 def get_stock_by_id(id: int, service: StockService = Depends(get_service)):
+    """
+    Retorna um estoque pelo ID.
+    """
     return service.get_by_id(id)
 
 @router.post("/", response_model=schemas.StockOut, status_code=201)
 def add_stock(stock_in: schemas.StockCreate, service: StockService = Depends(get_service)):
+    """
+    Adiciona um novo estoque. Para adicionar um estoque é necessario que o produto não possua um estoque.
+    """
     return service.create(stock_in)
