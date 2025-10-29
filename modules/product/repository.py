@@ -1,5 +1,6 @@
 from core.db import DataBase
 from modules.product.schemas import ProductCreate
+from fastapi import HTTPException, status
 
 class ProductRepository:
     
@@ -21,17 +22,30 @@ class ProductRepository:
     """
 
     def get_all(self):
-        with DataBase() as db:
-            return db.execute(self.QUERY_ALL)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_ALL)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao buscar produtos")
+
 
     def get_id(self, id: int):
-        with DataBase() as db:
-            return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao encontrar produto por id: {id}")
 
     def get_by_company_id(self, company_id: int):
-        with DataBase() as db:
-            return db.execute(self.QUERY_GET_BY_COMPANY, (company_id,))
-
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_GET_BY_COMPANY, (company_id,))
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao encontrar produtos por empresa id: {company_id}")
+        
     def save(self, product: ProductCreate):
         with DataBase() as db:
             params = (

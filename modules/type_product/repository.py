@@ -1,6 +1,6 @@
 from core.db import DataBase
 from modules.type_product.schemas import TypeProductCreate
-
+from fastapi import HTTPException, status
 
 class TypeProductRepository:
     QUERY_ALL = "SELECT * FROM type_product ORDER BY id;"
@@ -8,12 +8,21 @@ class TypeProductRepository:
     QUERY_CREATE = "INSERT INTO type_product (name, cod, company_id) VALUES (%s, %s, %s) RETURNING *;"
 
     def get_all(self):
-        with DataBase() as db:
-            return db.execute(self.QUERY_ALL)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_ALL)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao buscar tipos de produto")
+                                
 
     def get_id(self, id: int):
-        with DataBase() as db:
-            return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao encontrar tipo de produto por id: {id}")
 
     def save(self, type_product: TypeProductCreate):
         with DataBase() as db:

@@ -1,6 +1,6 @@
 from core.db import DataBase
 from modules.stock.schemas import StockCreate
-
+from fastapi import HTTPException, status
 
 class StockRepository:
     
@@ -26,12 +26,21 @@ class StockRepository:
     """
 
     def get_all(self):
-        with DataBase() as db:
-            return db.execute(self.QUERY_ALL)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_ALL)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao buscar estoque")
+
 
     def get_id(self, id: int):
-        with DataBase() as db:
-            return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        try:
+            with DataBase() as db:
+                return db.execute(self.QUERY_GET_ID, (id,), many=False)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Erro ao encontrar estoque por id: {id}")
 
     def save(self, stock: StockCreate):
         with DataBase() as db:
